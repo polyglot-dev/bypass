@@ -15,6 +15,16 @@ defmodule Bypass do
   import Bypass.Utils
   require Logger
 
+
+  @spec open_dev(Keyword.t()) :: Bypass.t()
+  def open_dev(opts \\ []) do
+    pid = start_instance(opts)
+    port = Bypass.Instance.call(pid, :port)
+    debug_log("Did open connection #{inspect(pid)} on port #{inspect(port)}")
+    %Bypass{pid: pid, port: port}
+  end
+
+
   @doc """
   Starts an Elixir process running a minimal Plug app. The process is a HTTP
   handler and listens to requests on a TCP port on localhost.
